@@ -392,7 +392,7 @@ EOT;
      */
     protected function callModel(string $prompt): array
     {
-        $geminiKey = config('services.gemini.key') ?: env('GEMINI_API_KEY');
+        $geminiKey = \App\Models\SystemSetting::get('gemini_api_key') ?: config('services.gemini.key') ?: env('GEMINI_API_KEY');
         $openaiKey = env('OPENAI_API_KEY');
 
         // 1. Google Gemini API
@@ -588,12 +588,11 @@ EOT;
             return "بناءً على نتائج البحث التي وجدناها لك على الويب، قمنا بإدراج أهم المصادر والمراجع المباشرة أدناه لتطلع عليها فوراً وتستفيد منها.";
         }
 
-        return "أهلاً بك! أنا معك لمساعدتك على ترتيب مهامك وأولوياتك. يمكنك اختياري لمساعدتك في:\n" .
+        return "أهلاً بك! أنا معك لمساعدتك على ترتيب مهامك وأولوياتك. يمكنك الاستعانة بي في:\n" .
                "• الضغط على **«أنا مشتت»** إذا كنت لا تعرف من أين تبدأ.\n" .
                "• الضغط على **«رتّب يومي»** للحصول على خطة يومية ذكية.\n" .
-               "• تقسيم أي مهمة إلى مهام فرعية سهلة.\n" .
-               "• البحث في الويب عن أي معلومة أو مصادر تعليمية.\n\n" .
-               "💡 *لتفعيل نموذج الذكاء الاصطناعي التوليدي الكامل (Gemini)، ما عليك سوى وضع مفتاح GEMINI_API_KEY في ملف .env.*";
+               "• تقسيم أي مهمة إلى مهام فرعية سهلة ومحددة.\n" .
+               "• البحث في الويب أو في ملاحظاتك الشخصية.";
     }
 
     /**
@@ -872,7 +871,7 @@ EOT;
 {$tasksSummary}
 EOT;
 
-        $geminiKey = config('services.gemini.key') ?: env('GEMINI_API_KEY');
+        $geminiKey = \App\Models\SystemSetting::get('gemini_api_key') ?: config('services.gemini.key') ?: env('GEMINI_API_KEY');
         $model = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-3.5-flash');
 
         if (!empty($geminiKey)) {
@@ -976,7 +975,7 @@ EOT;
      */
     public function generateWeeklyAnalysis(User $user, array $stats, array $answers, Carbon $start, Carbon $end): array
     {
-        $geminiKey = config('services.gemini.key') ?: env('GEMINI_API_KEY');
+        $geminiKey = \App\Models\SystemSetting::get('gemini_api_key') ?: config('services.gemini.key') ?: env('GEMINI_API_KEY');
         $model = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-3.5-flash');
 
         $startStr = $start->locale('ar')->isoFormat('D MMMM YYYY');
@@ -1084,7 +1083,7 @@ EOT;
      */
     public function generateSkillBreakdown(Skill $skill): array
     {
-        $geminiKey = config('services.gemini.key') ?: env('GEMINI_API_KEY');
+        $geminiKey = \App\Models\SystemSetting::get('gemini_api_key') ?: config('services.gemini.key') ?: env('GEMINI_API_KEY');
         $model = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-1.5-flash');
 
         $prompt = <<<EOT
@@ -1175,7 +1174,7 @@ EOT;
      */
     public function generateSkillRoadmap(Skill $skill): array
     {
-        $geminiKey = config('services.gemini.key') ?: env('GEMINI_API_KEY');
+        $geminiKey = \App\Models\SystemSetting::get('gemini_api_key') ?: config('services.gemini.key') ?: env('GEMINI_API_KEY');
         $model = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-1.5-flash');
 
         $subSkills = $skill->subSkills;

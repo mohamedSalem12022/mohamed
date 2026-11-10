@@ -138,7 +138,12 @@
                     </div>
                     <div class="max-w-[90%] sm:max-w-[80%] space-y-2">
                         <div class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-2xs relative group">
-                            <span class="message-text">{!! nl2br(e($msg->content)) !!}</span>
+                            @php
+                                $formattedMsg = e($msg->content);
+                                $formattedMsg = preg_replace('/\*\*(.*?)\*\*/s', '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>', $formattedMsg);
+                                $formattedMsg = preg_replace('/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/s', '<em class="italic">$1</em>', $formattedMsg);
+                            @endphp
+                            <span class="message-text">{!! nl2br($formattedMsg) !!}</span>
                             
                             <!-- TTS Speaker Button -->
                             <button type="button" onclick="speakMessageBubble(this)" class="mt-2 text-slate-400 hover:text-brand-600 text-xs flex items-center gap-1 font-semibold transition" title="استمع إلى الرد صوتياً">
@@ -760,7 +765,7 @@
             </div>
             <div class="max-w-[90%] sm:max-w-[80%] space-y-2">
                 <div class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-2xs relative">
-                    <span class="message-text">${escapeHtml(msg.content)}</span>
+                    <span class="message-text">${formatMarkdownMessage(msg.content)}</span>
                     <button type="button" onclick="speakMessageBubble(this)" class="mt-2 text-slate-400 hover:text-brand-600 text-xs flex items-center gap-1 font-semibold transition" title="استمع إلى الرد صوتياً">
                         <i class="fa-solid fa-volume-high text-[11px]"></i>
                         <span class="text-[10px]">استمع</span>
@@ -1019,6 +1024,14 @@
             "'": '&#039;'
         };
         return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    function formatMarkdownMessage(text) {
+        if (!text) return '';
+        let escaped = escapeHtml(text);
+        escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>');
+        escaped = escaped.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em class="italic">$1</em>');
+        return escaped;
     }
 </script>
 @endpush
