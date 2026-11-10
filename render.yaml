@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: mo-life-os
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: APP_NAME
+        value: "MO Life OS"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        value: base64:mo9IhZhQsWOlDQ5WKgexpGASmWMW1gIcaSupGEk3ox0=
+      - key: APP_URL
+        value: https://mo-life-os.onrender.com
+      - key: APP_TIMEZONE
+        value: Asia/Gaza
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/www/database/database.sqlite
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_STORE
+        value: file
+      - key: PHP_CLI_SERVER_WORKERS
+        value: "4"
+      - key: GEMINI_API_KEY
+        sync: false
